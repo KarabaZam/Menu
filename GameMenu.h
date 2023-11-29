@@ -5,39 +5,44 @@ namespace game {
 
 	class GameMenu
 	{
-		float menu_X;                                     // Координаты меню по X
-		float menu_Y;				                      // Координаты меню по Y
-		int menu_Step;                                    // Расстояние между пунктами меню
-		int max_menu;                                     // Максимальное количество пунктов меню
-		int size_font;                                    // Размер шрифта
-		int mainMenuSelected;                             // Номер текущего пункта меню 
-		sf::Font font;                                    // Шрифт меню 
-		std::vector<sf::Text> mainMenu;                   // Динамический массив названий меню
+		float menu_X;                                     // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ X
+		float menu_Y;				                      // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ Y
+		int menu_Step;                                    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+		int max_menu;                                     // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+		int size_font;                                    // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+		int mainMenuSelected;                             // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ 
+		sf::Font font;  
+		sf::Text* mainMenu;                            // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ 
+		//std::vector<sf::Text> mainMenu;                   // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 
-		sf::Color menu_text_color = sf::Color::White;      // Цвет меню
-		sf::Color chose_text_color = sf::Color::Yellow;    // Цвет выбора меню
-		sf::Color border_color = sf::Color::Black;         // Цвет обводки текста
+		sf::Color menu_text_color = sf::Color::White;      // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+		sf::Color chose_text_color = sf::Color::Yellow;    // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+		sf::Color border_color = sf::Color::Black;         // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 
-		// Настройка текста меню
-		void setInitText(sf::Text& text, const sf::String& str, float xpos, float ypos) const;
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+		void setInitText(sf::Text& text, sf::String& str, float xpos, float ypos);
 
-		sf::RenderWindow& mywindow;                       // Ссылка на графическое окно
+		sf::RenderWindow& mywindow;   
+		                    // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 	public:
 
-		GameMenu(sf::RenderWindow& window, float menux, float menuy, int sizeFont, int step, std::vector<sf::String>& name);
+		GameMenu(sf::RenderWindow& window, float menux, float menuy,int index, sf::String name[], int sizeFont = 60, int step =80 );//, std::vector<sf::String>& name);
+		~GameMenu()
+		{
+			delete[] mainMenu;
+		}
+		void draw();                                     // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 
-		void draw();                                     // Рисуем меню
+		void MoveUp();                                   // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 
-		void MoveUp();                                   // Перемещение выбора меню вверх
+		void MoveDown();                                 // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 
-		void MoveDown();                                 // Перемещение выбора меню вниз
-
-		// Цвет элементов игрового меню
+		// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 		void setColorTextMenu(sf::Color menColor, sf::Color ChoColor, sf::Color BordColor);
 
-		void AlignMenu(int posx);       // Выравнивание положения меню (по левому по правому по центру)
+		void AlignMenu(int posx);       // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ (пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ)
 
-		int getSelectedMenuNumber() const     // Возвращает номер выбраного элемента
+		int getSelectedMenuNumber()     // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		{
 			return mainMenuSelected;
 		}

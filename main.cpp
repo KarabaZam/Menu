@@ -1,136 +1,66 @@
 #include <SFML/Graphics.hpp>
 #include"GameMenu.h"
-#include<SFML/Audio.hpp>
+// #include<SFML/Audio.hpp>
 #include "Animator.h"
-#include<Windows.h>
+// #include<Windows.h>
+// РџСЂРѕС‚РѕС‚РёРїС‹ С„СѓРЅРєС†РёР№
+void InitText(sf::Text& mtext, float xpos, float ypos, sf::String str, int size_font, sf::Color menu_text_color, int bord, sf::Color border_color);
 
-using namespace sf;
+void GameStart();
 
-struct TextFormat
-{
-    int size_font = 60;
-    Color menu_text_color = Color::White;
-    float bord = 0.0f;
-    Color border_color = Color::Black;
-};
-
-// функция настройки текста
-void InitText(Text& mtext, float xpos, float ypos, const String & str,TextFormat Ftext);
-
-// Игровой процесс
-void GamеStart();
-
-// Настройки игры
 void Options();
 
-// Описание игры
 void About_Game();
+
+
+ using namespace sf;
+
 
 
 
 int main()
 {
-    AssetManager manager;
-    // Создаём окно windows
+    
     RenderWindow window;
-    window.create(VideoMode::getDesktopMode(), L"Моя игра", Style::Fullscreen);
-
-    // Делаем окно windows прозрачным
-    SetWindowLong(window.getSystemHandle(), GWL_EXSTYLE, GetWindowLong(window.getSystemHandle(), GWL_EXSTYLE) | WS_EX_LAYERED);
-    SetLayeredWindowAttributes(window.getSystemHandle(), 0, 0, LWA_COLORKEY);
-
-    window.setMouseCursorVisible(false); //отключаем видимость курсора
-
-    // Размер экрана
-    auto width = static_cast<float>(VideoMode::getDesktopMode().width);
-    auto height = static_cast<float>(VideoMode::getDesktopMode().height);
-
-    //Заставка загрузки
-    Texture texthome;
-    texthome.loadFromFile("Image/z1.png");
-    RectangleShape homecls(Vector2f(640, 280));
-    homecls.setTexture(&texthome);
-    homecls.setPosition(Vector2f(width / 2 - homecls.getLocalBounds().width/2, height / 2- homecls.getLocalBounds().height/2));
-    window.draw(homecls);
-    window.display();
-
-    // Звуковые эффекты
-    SoundBuffer buffer;
-    SoundBuffer buf_return;
-
-    if (!buffer.loadFromFile("audio/audiomenu2.wav")) return 22;
-    if (!buf_return.loadFromFile("audio/audiomenu5.wav")) return 22;
-    Sound sound;
-    Sound sound_return;
-    sound.setBuffer(buffer);
-    sound_return.setBuffer(buf_return);
-
-    Music music;
-    if (!music.openFromFile("audio/horror.ogg")) return 25;
-    music.setLoop(true);
-    music.setVolume(50);
-    music.play();
-
-    Music musicF;
-    if (!musicF.openFromFile("audio/faer.ogg")) return 28;
-    musicF.setLoop(true);
-    musicF.setVolume(50);
-    musicF.play();
+    //window.create(VideoMode::getDesktopMode(), L"РњРѕСЏ РёРіСЂР°", Style::Fullscreen);
+    window.create(VideoMode(1920,1080), L"РњРѕСЏ РёРіСЂР°", Style::Default);
 
 
-    // Название пунктов меню
-    std::vector<String> name_menu{ L"Старт",L"Настройки", L"О игре",L"Выход" };
-
-    // Объект меню
-    game::GameMenu mymenu(window, 950, 350, 100, 120,name_menu);
-    // Установка цвета отображения меню
-    mymenu.setColorTextMenu(Color(237, 147, 0), Color::Red, Color::Black);
-    mymenu.AlignMenu(2);
-
-    // Плавное появление из черного
-    Texture texture_back;
-    if (!texture_back.loadFromFile("image/t.jpg")) return 51;
-    Sprite backgroundBlack;
-    backgroundBlack.setColor(sf::Color(255, 255, 255, 255));
-    backgroundBlack.setTexture(texture_back);
-    backgroundBlack.setTextureRect(IntRect(0, 0, static_cast<int>(width), static_cast<int>(height)));
-    float alpha = 255;
+    window.setMouseCursorVisible(false); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
 
-    // Устанавливаем фон экрана меню
+    //  float width = (VideoMode::getDesktopMode().width);
+    //  float height = (VideoMode::getDesktopMode().height);
+    float width = 1920;  // РІР°С€Рµ РїСЂРµРґРїРѕС‡С‚РёС‚РµР»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РґР»СЏ С€РёСЂРёРЅС‹
+    float height = 1080;
+    
+ 
+
+
     RectangleShape background(Vector2f(width, height));
 
     Texture texture_window;
-    if (!texture_window.loadFromFile("image/menu9.jpg")) return 4;
+    if (!texture_window.loadFromFile("../image/menu9.jpg")) return 4;
     background.setTexture(&texture_window);
 
-    // Шрифт для названия экрана
+    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     Font font;
-    if (!font.loadFromFile("font/troika.otf")) return 5;
-    // Текст с названием экрана
+    if (!font.loadFromFile("../font/troika.otf")) return 5;
+
     Text Titul;
     Titul.setFont(font);
-    TextFormat Ftext;
-    Ftext.size_font = 150;
-    Ftext.menu_text_color = Color(237, 147, 0);
-    Ftext.bord = 3;
-    InitText(Titul, 480, 50, L"Апокалипсис", Ftext);
 
+    InitText(Titul, 420, 50, L"THE LAST Dragon", 150, Color(237, 147, 0), 3, Color(237, 147, 0));
 
-    // Анимация костра
-    Vector2i spriteSize(300, 313);
+    String name_menu[]{L"Start",L"Options", L"About",L"Exit"};
 
-    Sprite sprite;
-    sprite.setPosition(440, 780);
-    Animator animator(sprite);
+    game::GameMenu mymenu(window, 950, 350, 4 , name_menu,100,120);
+    
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    // Vector2i spriteSize(300, 313);
+    mymenu.setColorTextMenu(Color(237, 147, 0), Color::Red, Color::Black);
+    mymenu.AlignMenu(2);
 
-    auto& idleAnimation = animator.CreateAnimation("Idle", "image/f.png", seconds(1), true);
-
-    idleAnimation.AddFrames(Vector2i(0, 0), spriteSize, 5, 4);
-
-
-    Clock clock;
-    SetLayeredWindowAttributes(window.getSystemHandle(), 100, 0, LWA_COLORKEY);
     while (window.isOpen())
     {
         Event event;
@@ -139,72 +69,63 @@ int main()
 
             if (event.type == Event::KeyReleased)
             {
-                // События выбра пунктов меню
-                if (event.key.code == Keyboard::Up) { sound.play(); mymenu.MoveUp(); }       // вверх
-                if (event.key.code == Keyboard::Down) { sound.play(); mymenu.MoveDown(); }  // вниз
-                if (event.key.code == Keyboard::Return)                                     // ввод
+                
+                if (event.key.code == Keyboard::Up) { mymenu.MoveUp(); }       // пїЅпїЅпїЅпїЅпїЅ
+                if (event.key.code == Keyboard::Down) {  mymenu.MoveDown(); }  // пїЅпїЅпїЅпїЅ
+                if (event.key.code == Keyboard::Return)                                     // пїЅпїЅпїЅпїЅ
                 {
-                    music.pause(); musicF.pause();
-                    sound_return.play();
-                    // Переходим на выбранный пункт меню
+
                     switch (mymenu.getSelectedMenuNumber())
                     {
-                    case 0:GamеStart();  break;
+                    case 0:GameStart();  break;
                     case 1:Options();     break;
                     case 2:About_Game();  break;
                     case 3:window.close(); break;
-                    default:break;
                     }
-                    music.play(); musicF.play();
+
                 }
             }
+            
         }
 
-        // Обновление анимации
-        Time deltaTime = clock.restart();
-        animator.Update(deltaTime);
-
-        // Плавное осветление экрана меню
-        if (alpha > 0)
-        {
-            alpha -= 0.05f;
-            backgroundBlack.setColor(Color(255, 255, 255, static_cast<unsigned char>(alpha)));
-        }
-
-        // Область отрисовки объектов      
+        //mymenu.AlignMenu(2);
         window.clear();
         window.draw(background);
         window.draw(Titul);
         mymenu.draw();
-        window.draw(sprite);
-        window.draw(backgroundBlack);
         window.display();
-    }
+     }
+     
     return 0;
+    }
+
+
+
+void InitText(Text& mtext, float xpos, float ypos, String str, int size_font, 
+    Color menu_text_color, int bord, Color border_color)
+{
+mtext.setCharacterSize(size_font);
+mtext.setPosition(xpos, ypos);
+mtext.setString(str); 
+mtext.setFillColor(menu_text_color); 
+mtext.setOutlineThickness(bord); 
+mtext.setOutlineColor(border_color);
+
+
+
 }
 
-// функция настройки текста
-void InitText(Text& mtext, float xpos, float ypos, const String & str, TextFormat Ftext)
-{
-    mtext.setCharacterSize(Ftext.size_font);
-    mtext.setPosition(xpos, ypos);
-    mtext.setString(str);
-    mtext.setFillColor(Ftext.menu_text_color);
-    mtext.setOutlineThickness(Ftext.bord);
-    mtext.setOutlineColor(Ftext.border_color);
 
-}
-
-// Игровой процесс
-void GamеStart()
+void GameStart()
 {
-    RenderWindow Play(VideoMode::getDesktopMode(), L"Уровень 1", Style::Fullscreen);
+    //RenderWindow Play(VideoMode::getDesktopMode(), L"РЈСЂРѕРІРµРЅСЊ 1", Style::Fullscreen);
+    RenderWindow Play(VideoMode(1920,1080), L"РЈСЂРѕРІРµРЅСЊ 1", Style::Default);
 
 
     RectangleShape background_play(Vector2f(1920, 1080));
 
     Texture texture_play;
-    if (!texture_play.loadFromFile("image/menu4.jpg")) exit(1);
+    if (!texture_play.loadFromFile("../image/menu4.jpg")) exit(1);
     background_play.setTexture(&texture_play);
 
     while (Play.isOpen())
@@ -223,14 +144,15 @@ void GamеStart()
     }
 }
 
-// Настройки игры
+
 void Options()
 {
-    RenderWindow Options(VideoMode::getDesktopMode(), L"Настройки", Style::Fullscreen);
+    //RenderWindow Options(VideoMode:getDesktopMode() ,L"РќР°СЃС‚СЂРѕР№РєРё", Style::Fullscreen);
+    RenderWindow Options(VideoMode(1920, 1080) ,L"РќР°СЃС‚СЂРѕР№РєРё", Style::Default);
 
     RectangleShape background_opt(Vector2f(1920, 1080));
     Texture texture_opt;
-    if (!texture_opt.loadFromFile("image/menu1.jpg")) exit(2);
+    if (!texture_opt.loadFromFile("../image/menu1.jpg")) exit(2);
 
     background_opt.setTexture(&texture_opt);
     while (Options.isOpen())
@@ -251,27 +173,17 @@ void Options()
 
 }
 
-// Описание игры
+// // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 void About_Game()
 {
-    RenderWindow About(VideoMode::getDesktopMode(), L"О игре", Style::Fullscreen);
+    RenderWindow About(VideoMode::getDesktopMode(), L"Рћ РёРіСЂРµ", Style::Default);
 
     RectangleShape background_ab(Vector2f(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height));
     Texture texture_ab;
-    if (!texture_ab.loadFromFile("image/menu2.jpg")) exit(3);
+    if (!texture_ab.loadFromFile("../image/menu2.jpg")) exit(3);
     background_ab.setTexture(&texture_ab);
 
-    // Шрифт для названия экрана
-    Font font;
-    if (!font.loadFromFile("font/troika.otf")) exit(6);
-    // Текст с названием экрана
-    Text Titul;
-    Titul.setFont(font);
-    TextFormat Ftext;
-    Ftext.size_font = 120;
-    Ftext.menu_text_color = Color(237, 147, 0);
-    Ftext.bord = 3;
-    InitText(Titul, 500, 50, L"Описание игры", Ftext);
+
 
     while (About.isOpen())
     {
@@ -286,7 +198,7 @@ void About_Game()
         }
         About.clear();
         About.draw(background_ab);
-        About.draw(Titul);
+        //About.draw(Titul);
         About.display();
-    }
+    }  
 }
